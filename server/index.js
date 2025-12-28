@@ -5,7 +5,7 @@ const multer = require("multer");
 
 // --- PERBAIKAN IMPORT CLOUDINARY ---
 const cloudinary = require("cloudinary").v2;
-const CloudinaryStorage = require("multer-storage-cloudinary");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const { Pool } = require("pg");
 const { PrismaClient } = require("@prisma/client");
@@ -34,7 +34,7 @@ const storage = new CloudinaryStorage({
   cloudinary,
   params: {
     folder: "portfolio-tahajjadan",
-    allowedFormats: ["jpg", "png", "jpeg", "webp"],
+    allowed_formats: ["jpg", "png", "jpeg", "webp"],
   },
 });
 
