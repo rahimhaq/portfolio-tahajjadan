@@ -5,7 +5,7 @@ const multer = require("multer");
 
 // --- PERBAIKAN IMPORT CLOUDINARY ---
 const cloudinary = require("cloudinary").v2;
-const CloudinaryStorage = require("multer-storage-cloudinary");
+// const { CloudinaryStorage } = require("multer-storage-cloudinary");
 
 const { Pool } = require("pg");
 const { PrismaClient } = require("@prisma/client");
@@ -30,15 +30,11 @@ cloudinary.config({
 });
 
 // Konfigurasi Storage dengan Error Handling Sederhana
-const storage = new CloudinaryStorage({
-  cloudinary,
-  params: {
-    folder: "portfolio-tahajjadan",
-    allowedFormats: ["jpg", "png", "jpeg", "webp"],
-  },
+// ✅ Gunakan memory storage untuk Vercel
+const upload = multer({ 
+  storage: multer.memoryStorage(),
+  limits: { fileSize: 2 * 1024 * 1024 } // Max 2MB
 });
-
-const upload = multer({ storage: storage });
 
 // 3. MIDDLEWARE AUTH
 const verifyAdmin = (req, res, next) => {
@@ -77,7 +73,22 @@ app.post('/api/projects', upload.single('image'), verifyAdmin, async (req, res) 
     
     if (!req.file) return res.status(400).json({ error: "Wajib upload gambar!" });
 
-    const imageUrl = req.file.path; 
+    // Upload manual ke Cloudinary dari buffer
+    const uploadResult = await new Promise((resolve, reject) => {
+      const uploadStream = cloudinary.uploader.upload_stream(
+        {
+          folder: "portfolio-tahajjadan",
+          resource_type: "auto"
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result);
+        }
+      );
+      uploadStream.end(req.file.buffer);
+    });
+
+    const imageUrl = uploadResult.secure_url;
 
     let techArray = [];
     try { techArray = JSON.parse(tech); } catch (e) { techArray = [tech]; }
@@ -95,7 +106,7 @@ app.post('/api/projects', upload.single('image'), verifyAdmin, async (req, res) 
     res.status(201).json(newProject);
   } catch (error) {
     console.error("Upload Error:", error);
-    res.status(500).json({ error: "Gagal upload project" });
+    res.status(500).json({ error: "Gagal upload project", details: error.message });
   }
 });
 
@@ -116,8 +127,22 @@ app.put('/api/projects/:id', upload.single('image'), verifyAdmin, async (req, re
       try { updateData.tech = JSON.parse(tech); } catch(e) {}
     }
 
+    // Jika ada file baru, upload ke Cloudinary
     if (req.file) {
-      updateData.image = req.file.path;
+      const uploadResult = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          {
+            folder: "portfolio-tahajjadan",
+            resource_type: "auto"
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        uploadStream.end(req.file.buffer);
+      });
+      updateData.image = uploadResult.secure_url;
     }
 
     const updatedProject = await prisma.project.update({
@@ -127,7 +152,7 @@ app.put('/api/projects/:id', upload.single('image'), verifyAdmin, async (req, re
     res.json(updatedProject);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: "Gagal update project" });
+    res.status(500).json({ error: "Gagal update project", details: error.message });
   }
 });
 
