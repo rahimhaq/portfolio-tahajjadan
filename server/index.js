@@ -10,7 +10,7 @@ const cors = require("cors");
 const multer = require("multer");
 
 const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinaryStorage = require("multer-storage-cloudinary");
 
 const { Pool } = require("pg");
 const { PrismaClient } = require("@prisma/client");
@@ -74,13 +74,14 @@ cloudinary.config({
  *  MULTER + CLOUDINARY STORAGE
  * ===============================
  */
-const storage = new CloudinaryStorage({
+const storage = cloudinaryStorage({
   cloudinary,
-  params: async (req, file) => ({
+  params: {
     folder: "portfolio-tahajjadan",
-    format: file.mimetype.split("/")[1],
-  }),
+    allowedFormats: ["jpg", "png", "jpeg", "webp"],
+  },
 });
+
 
 const upload = multer({ storage });
 
