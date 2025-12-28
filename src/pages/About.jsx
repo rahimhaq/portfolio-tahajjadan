@@ -21,7 +21,7 @@ const About = () => {
               <span className="text-blue-600">Computer Engineering Technology</span>
             </h2>
             
-            <div className="flex items-center gap-4 text-lg text-slate-600 bg-white p-4 rounded-xl shadow-sm border border-slate-100 inline-block">
+            <div className="flex items-center gap-4 text-lg text-slate-600 bg-white p-4 rounded-xl shadow-sm border border-slate-100">
               <GraduationCap className="text-blue-600 w-8 h-8" />
               <div>
                 <p className="font-bold text-slate-800">IPB University (2021 - 2025)</p>
