@@ -63,8 +63,7 @@ const Projects = () => {
       <div className="mb-12 text-center">
         <h2 className="text-3xl font-bold text-blue-900">Featured Projects</h2>
         <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-          Daftar portofolio ini diambil secara realtime dari Database Neon. 
-          Klik kartu untuk melihat detail dan galeri.
+          Below is a selection of projects that I have worked on, showcasing my experience, technical skills, and hands-on involvement in various areas of technology and system development.
         </p>
       </div>
 
