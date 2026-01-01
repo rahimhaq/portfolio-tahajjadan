@@ -8,19 +8,17 @@ const { PrismaPg } = require("@prisma/adapter-pg");
 
 const app = express();
 
-// --- PERBAIKAN DATABASE START ---
-// Gunakan POSTGRES_PRISMA_URL (bawaan Vercel) atau fallback ke DATABASE_URL
+// --- SETUP DATABASE START ---
 const connectionString = process.env.POSTGRES_PRISMA_URL || process.env.DATABASE_URL;
 
 const pool = new Pool({ 
   connectionString: connectionString,
-  // PENTING: Vercel Postgres WAJIB menggunakan SSL di Production
   ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false 
 });
 
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
-// --- PERBAIKAN DATABASE END ---
+// --- SETUP DATABASE END ---
 
 app.use(cors({
   origin: [
@@ -33,7 +31,6 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-// app.options('*', cors());
 app.use(express.json());
 
 cloudinary.config({
@@ -42,15 +39,36 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Setup Multer (Memory Storage) - File disimpan di RAM sementara
+// Setup Multer (Memory Storage)
 const upload = multer({ 
   storage: multer.memoryStorage(),
-  limits: { fileSize: 2 * 1024 * 1024 } // Batas 2MB agar aman untuk Vercel
+  limits: { fileSize: 2 * 1024 * 1024 } // Batas 2MB per file
 });
+
+// --- PERUBAHAN 1: DEFINISI UPLOAD FIELDS ---
+// Menerima 1 file untuk 'image' (Cover) dan maksimal 10 file untuk 'gallery'
+const uploadMiddleware = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'gallery', maxCount: 10 }
+]);
+
+// --- PERUBAHAN 2: HELPER FUNCTION UPLOAD ---
+// Fungsi ini dipisah agar bisa dipakai untuk upload cover maupun loop gallery
+const uploadToCloudinary = (buffer) => {
+  return new Promise((resolve, reject) => {
+    const stream = cloudinary.uploader.upload_stream(
+      { folder: "portfolio-tahajjadan", resource_type: "auto" },
+      (error, result) => {
+        if (error) reject(error);
+        else resolve(result.secure_url);
+      }
+    );
+    stream.end(buffer);
+  });
+};
 
 // Middleware Verify Admin
 const verifyAdmin = (req, res, next) => {
-  // Karena 'upload.single' berjalan duluan di route, req.body sudah terisi di sini
   const { adminKey } = req.body;
   
   if (!process.env.ADMIN_PASSWORD) {
@@ -62,6 +80,7 @@ const verifyAdmin = (req, res, next) => {
   next();
 };
 
+// GET ALL PROJECTS
 app.get('/api/projects', async (req, res) => {
   try {
     const projects = await prisma.project.findMany({ orderBy: { createdAt: 'desc' } });
@@ -73,22 +92,26 @@ app.get('/api/projects', async (req, res) => {
 });
 
 // CREATE (POST)
-app.post('/api/projects', upload.single('image'), verifyAdmin, async (req, res) => {
+app.post('/api/projects', uploadMiddleware, verifyAdmin, async (req, res) => {
   try {
     const { title, desc, link, github, tech } = req.body;
-    if (!req.file) return res.status(400).json({ error: "Wajib upload gambar!" });
+    
+    // Validasi: Cover Image Wajib Ada
+    // req.files['image'] adalah array, jadi kita ambil index ke-0
+    if (!req.files || !req.files['image']) {
+       return res.status(400).json({ error: "Wajib upload gambar cover!" });
+    }
 
-    // Upload Buffer ke Cloudinary menggunakan Stream
-    const uploadResult = await new Promise((resolve, reject) => {
-      const uploadStream = cloudinary.uploader.upload_stream(
-        { folder: "portfolio-tahajjadan", resource_type: "auto" },
-        (error, result) => {
-          if (error) reject(error);
-          else resolve(result);
-        }
-      );
-      uploadStream.end(req.file.buffer);
-    });
+    // 1. Upload Cover Image
+    const coverUrl = await uploadToCloudinary(req.files['image'][0].buffer);
+
+    // 2. Upload Gallery Images (Jika ada)
+    let galleryUrls = [];
+    if (req.files['gallery']) {
+        // Kita map setiap file menjadi Promise upload, lalu jalankan semua sekaligus (Parallel)
+        const uploadPromises = req.files['gallery'].map(file => uploadToCloudinary(file.buffer));
+        galleryUrls = await Promise.all(uploadPromises);
+    }
 
     let techArray = [];
     try { techArray = JSON.parse(tech); } catch (e) { techArray = [tech]; }
@@ -96,7 +119,8 @@ app.post('/api/projects', upload.single('image'), verifyAdmin, async (req, res) 
     const newProject = await prisma.project.create({
       data: {
         title, desc,
-        image: uploadResult.secure_url,
+        image: coverUrl,       // String (URL Cover)
+        gallery: galleryUrls,  // String[] (Array URL Gallery)
         link: link || null,
         github: github || null,
         tech: techArray,
@@ -110,7 +134,7 @@ app.post('/api/projects', upload.single('image'), verifyAdmin, async (req, res) 
 });
 
 // UPDATE (PUT)
-app.put('/api/projects/:id', upload.single('image'), verifyAdmin, async (req, res) => {
+app.put('/api/projects/:id', uploadMiddleware, verifyAdmin, async (req, res) => {
   const { id } = req.params;
   const { title, desc, link, github, tech } = req.body;
 
@@ -121,19 +145,16 @@ app.put('/api/projects/:id', upload.single('image'), verifyAdmin, async (req, re
       try { updateData.tech = JSON.parse(tech); } catch(e) {}
     }
     
-    // Jika ada file baru, upload ulang ke Cloudinary
-    if (req.file) {
-      const uploadResult = await new Promise((resolve, reject) => {
-        const uploadStream = cloudinary.uploader.upload_stream(
-          { folder: "portfolio-tahajjadan", resource_type: "auto" },
-          (error, result) => {
-            if (error) reject(error);
-            else resolve(result);
-          }
-        );
-        uploadStream.end(req.file.buffer);
-      });
-      updateData.image = uploadResult.secure_url;
+    // Cek jika ada upload Cover baru
+    if (req.files && req.files['image']) {
+       updateData.image = await uploadToCloudinary(req.files['image'][0].buffer);
+    }
+
+    // Cek jika ada upload Gallery baru
+    // Note: Logika ini akan ME-REPLACE gallery lama dengan yang baru.
+    if (req.files && req.files['gallery']) {
+       const uploadPromises = req.files['gallery'].map(file => uploadToCloudinary(file.buffer));
+       updateData.gallery = await Promise.all(uploadPromises);
     }
 
     const updatedProject = await prisma.project.update({
@@ -150,7 +171,6 @@ app.put('/api/projects/:id', upload.single('image'), verifyAdmin, async (req, re
 app.delete('/api/projects/:id', verifyAdmin, async (req, res) => {
   const { id } = req.params;
   try {
-    // Opsional: Anda bisa menambahkan logika menghapus gambar di Cloudinary di sini jika mau
     await prisma.project.delete({ where: { id: parseInt(id) } });
     res.json({ message: "Deleted" });
   } catch (error) {
@@ -158,4 +178,4 @@ app.delete('/api/projects/:id', verifyAdmin, async (req, res) => {
   }
 });
 
-module.exports = app; 
+module.exports = app;
