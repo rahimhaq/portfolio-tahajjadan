@@ -286,7 +286,9 @@ const Dashboard = () => {
                   Upload Gallery Tambahan (Bisa banyak)
                 </span>
                 <span className="text-xs text-gray-400">
-                  {galleryFiles.length} file dipilih
+                  {galleryFiles && galleryFiles.length > 0
+                    ? `${galleryFiles.length} file dipilih`
+                    : "Belum ada file dipilih"}
                 </span>
               </div>
             </div>
