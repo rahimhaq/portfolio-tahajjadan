@@ -58,30 +58,35 @@ const Projects = () => {
     );
   }
 
-  return (
-    <div className="pt-24 pb-12 px-4 max-w-7xl mx-auto">
-      <div className="mb-12 text-center">
-        <h2 className="text-3xl font-bold text-blue-900">Featured Projects</h2>
-        <p className="text-gray-600 mt-3 max-w-2xl mx-auto">
-          Below is a selection of projects that I have worked on, showcasing my experience, technical skills, and hands-on involvement in various areas of technology and system development.
+return (
+    <div className="pt-24 pb-20 px-4 md:px-8 max-w-7xl mx-auto">
+      
+      {/* Header Section */}
+      <div className="mb-12 text-center max-w-3xl mx-auto">
+        <h2 className="text-3xl md:text-4xl font-bold text-blue-900 mb-4">Featured Projects</h2>
+        <p className="text-gray-600 text-sm md:text-base leading-relaxed">
+          Below is a selection of projects that I have worked on, showcasing my experience, 
+          technical skills, and hands-on involvement in various areas of technology.
         </p>
       </div>
 
+      {/* Empty State */}
       {!loading && projects.length === 0 && (
-        <div className="text-center py-20 bg-blue-50 rounded-xl border border-dashed border-blue-200">
-          <p className="text-gray-500 text-lg">Belum ada project yang ditambahkan.</p>
+        <div className="text-center py-20 bg-blue-50 rounded-2xl border-2 border-dashed border-blue-200 mx-auto max-w-lg">
+          <p className="text-gray-500 font-medium">Belum ada project yang ditambahkan.</p>
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Grid System: 1 Kolom (HP) -> 2 Kolom (Tablet) -> 3 Kolom (Desktop) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
         {projects.map((item) => (
           <div 
             key={item.id} 
-            // 3. LOGIKA KLIK CARD: Buka Modal
             onClick={() => setSelectedProject(item)} 
-            className="bg-white rounded-xl overflow-hidden shadow-lg border border-blue-50 hover:shadow-2xl hover:shadow-blue-100 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full cursor-pointer group"
+            className="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 hover:shadow-xl hover:shadow-blue-100/50 hover:-translate-y-1 transition-all duration-300 flex flex-col h-full cursor-pointer group"
           >
-            <div className="relative h-48 overflow-hidden bg-gray-100">
+            {/* Image Container */}
+            <div className="relative h-48 sm:h-52 overflow-hidden bg-gray-100">
               <img 
                 src={item.image} 
                 alt={item.title}
@@ -91,47 +96,47 @@ const Projects = () => {
                 }} 
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
-              <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition" />
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
             </div>
 
-            <div className="p-6 flex flex-col flex-grow">
-              <h3 className="text-xl font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-blue-600 transition" title={item.title}>
+            {/* Content */}
+            <div className="p-5 md:p-6 flex flex-col flex-grow">
+              <h3 className="text-lg md:text-xl font-bold text-gray-800 mb-2 line-clamp-1 group-hover:text-blue-600 transition-colors">
                 {item.title}
               </h3>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow">
+              <p className="text-gray-600 text-sm mb-4 line-clamp-3 flex-grow leading-relaxed">
                 {item.desc}
               </p>
               
+              {/* Tech Tags */}
               <div className="flex flex-wrap gap-2 mb-6">
-                {item.tech && item.tech.length > 0 ? (
-                  item.tech.slice(0, 3).map((t, idx) => ( // Tampilkan max 3 tag di card
-                    <span key={idx} className="px-2.5 py-1 bg-blue-50 text-blue-600 text-xs rounded-full font-medium border border-blue-100">
+                {item.tech?.slice(0, 3).map((t, idx) => (
+                    <span key={idx} className="px-2 py-1 bg-gray-50 text-gray-600 text-[10px] md:text-xs font-medium rounded-md border border-gray-200">
                       {t}
                     </span>
-                  ))
-                ) : (
-                  <span className="text-xs text-gray-400 italic">No tech listed</span>
-                )}
-                {item.tech && item.tech.length > 3 && (
-                   <span className="text-xs text-gray-400 px-1 py-1">+{item.tech.length - 3}</span>
+                  ))}
+                {item.tech?.length > 3 && (
+                   <span className="text-[10px] text-gray-400 px-1 py-1">+{item.tech.length - 3}</span>
                 )}
               </div>
 
-              {/* Tombol Quick Action (Stop Propagation agar tidak memicu modal) */}
+              {/* Action Buttons */}
               <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
-                {item.link ? (
+                {/* ... (Tombol Live Demo & Github SAMA SEPERTI KODE ANDA) ... */}
+                {/* Pastikan tetap pakai e.stopPropagation() */}
+                 {item.link ? (
                   <a 
                     href={item.link} 
                     target="_blank" 
                     rel="noreferrer" 
-                    onClick={(e) => e.stopPropagation()} // PENTING: Supaya tidak buka modal saat klik tombol ini
-                    className="flex-1 flex items-center justify-center gap-2 py-2 bg-white border border-blue-200 text-blue-600 rounded-lg hover:bg-blue-50 transition text-sm font-medium"
+                    onClick={(e) => e.stopPropagation()} 
+                    className="flex-1 flex items-center justify-center gap-2 py-2 bg-white border border-blue-200 text-blue-600 rounded-lg hover:bg-blue-50 transition text-xs md:text-sm font-medium"
                   >
-                    <ExternalLink size={16} /> Live Demo
+                    <ExternalLink size={14} /> Demo
                   </a>
                 ) : (
-                  <button disabled className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-50 text-gray-300 border border-gray-100 rounded-lg cursor-not-allowed text-sm">
-                    <ExternalLink size={16} /> Demo N/A
+                  <button disabled className="flex-1 flex items-center justify-center gap-2 py-2 bg-gray-50 text-gray-300 border border-gray-100 rounded-lg cursor-not-allowed text-xs md:text-sm">
+                    Demo N/A
                   </button>
                 )}
                 
@@ -140,11 +145,11 @@ const Projects = () => {
                     href={item.github} 
                     target="_blank" 
                     rel="noreferrer" 
-                    onClick={(e) => e.stopPropagation()} // PENTING: Supaya tidak buka modal saat klik tombol ini
-                    className="flex items-center justify-center p-2.5 border border-gray-200 rounded-lg hover:bg-gray-800 hover:text-white hover:border-gray-800 text-gray-600 transition-all duration-300" 
+                    onClick={(e) => e.stopPropagation()} 
+                    className="flex items-center justify-center p-2 border border-gray-200 rounded-lg hover:bg-gray-800 hover:text-white hover:border-gray-800 text-gray-600 transition-all" 
                     title="View Code"
                    >
-                    <Github size={18} />
+                    <Github size={16} />
                   </a>
                 )}
               </div>
@@ -153,7 +158,7 @@ const Projects = () => {
         ))}
       </div>
 
-      {/* 4. RENDER MODAL DI SINI */}
+      {/* Modal */}
       {selectedProject && (
         <ProjectModal 
           project={selectedProject} 
