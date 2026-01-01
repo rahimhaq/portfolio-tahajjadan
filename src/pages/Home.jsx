@@ -14,22 +14,22 @@ const Home = ({ visitorName }) => {
       {/* Biarkan Hero clean & fokus */}
       <Hero visitorName={visitorName} />
 
-      {/* 2. About Section */}
+      {/* 2. Projects Section */}
+      {/* Gradient halus biar terasa section penting */}
+      <section className="py-32 bg-gradient-to-b from-blue-50 to-white">
+        <Projects />
+      </section>
+
+      {/* 3. About Section */}
       {/* Background putih + jarak besar */}
       <section className="py-0 bg-white">
         <About /> 
       </section>
 
-      {/* 3. Skills Section */}
+      {/* 4. Skills Section */}
       {/* Dibedakan dengan abu lembut */}
       <section className="py-0 bg-gradient-to-b from-white bg-blue-50">
         <Skills />
-      </section>
-
-      {/* 4. Projects Section */}
-      {/* Gradient halus biar terasa section penting */}
-      <section className="py-32 bg-gradient-to-b from-blue-50 to-white">
-        <Projects />
       </section>
 
       {/* 5. Contact Section */}
