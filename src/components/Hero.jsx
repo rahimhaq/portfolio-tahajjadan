@@ -20,14 +20,12 @@ const Hero = ({ visitorName }) => {
 
         {/* Subtitle */}
         <p className="text-xl md:text-2xl text-gray-600 font-medium mb-6">
-          Web Developer & Tech Enthusiast
+          Web Developer | Ex. Embedded System Engineer
         </p>
 
         {/* Description */}
         <p className="max-w-3xl mx-auto text-gray-500 mb-10 leading-relaxed">
-          Frontend Developer specializing in Legacy System Migration. Building
-          scalable, secure web architectures backed by a Certified Network
-          Administrator background.
+          Bridging Hardware & Software: Embedded Systems & Frontend Developer. Experienced in building scalable web solutions and satellite OBC prototypes, backed by a Certified Network Administrator background.
         </p>
 
         {/* CTA */}
