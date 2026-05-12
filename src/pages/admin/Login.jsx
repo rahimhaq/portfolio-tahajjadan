@@ -22,11 +22,11 @@ const Login = () => {
         <div className="flex justify-center mb-6 text-blue-600">
           <Lock size={48} />
         </div>
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Admin Area</h2>
+        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Rahim Haq</h2>
         
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Password Rahasia</label>
+            <label className="block text-sm font-medium text-gray-700 mb-1"></label>
             <input
               type="password"
               value={password}

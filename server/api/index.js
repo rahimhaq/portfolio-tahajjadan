@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 const cors = require("cors");
 const multer = require("multer");
@@ -177,5 +179,12 @@ app.delete('/api/projects/:id', verifyAdmin, async (req, res) => {
     res.status(500).json({ error: "Gagal hapus" });
   }
 });
+
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 5000;
+  app.listen(PORT, () => {
+    console.log(`✅ Backend Server is running locally on port ${PORT}`);
+  });
+}
 
 module.exports = app;

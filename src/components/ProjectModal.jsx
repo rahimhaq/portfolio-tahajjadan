@@ -73,7 +73,7 @@ const ProjectModal = ({ project, onClose }) => {
             {/* Header Modal */}
             <div className="p-6 md:p-8 pb-0 flex justify-between items-start">
                <div>
-                  <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2 leading-tight">{project.title}</h2>
+                  <h2 className="text-xl md:text-2xl font-bold text-gray-900 mb-2 leading-tight">{project.title}</h2>
                   <div className="flex flex-wrap gap-2 mt-2">
                     {project.tech.map((t, i) => (
                       <span key={i} className="px-2.5 py-1 bg-blue-50 text-blue-700 text-[10px] md:text-xs font-bold uppercase tracking-wide rounded-md border border-blue-100">
@@ -90,7 +90,7 @@ const ProjectModal = ({ project, onClose }) => {
 
             {/* Content Scrollable */}
             <div className="p-6 md:p-8 flex-1 overflow-y-auto">
-              <div className="prose prose-sm md:prose-base text-gray-600 leading-relaxed whitespace-pre-line">
+              <div className="prose prose-sm md:prose-base text-gray-600 leading-relaxed whitespace-pre-line text-justify">
                 {project.desc}
               </div>
 
@@ -126,7 +126,7 @@ const ProjectModal = ({ project, onClose }) => {
                    rel="noreferrer" 
                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold transition shadow-lg shadow-blue-200 text-sm md:text-base"
                  >
-                   <ExternalLink size={18} /> <span className="hidden sm:inline">Kunjungi</span> Website
+                   <ExternalLink size={18} /> <span className="hidden sm:inline">Kunjungi</span>
                  </a>
                ) : (
                   <button disabled className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-200 text-gray-400 rounded-xl font-semibold cursor-not-allowed text-sm md:text-base">

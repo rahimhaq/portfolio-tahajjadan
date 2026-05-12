@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 const Hero = ({ visitorName }) => {
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center overflow-hidden pt-28 pb-12 md:py-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center w-full">
         {/* Badge */}
         <div className="inline-flex items-center px-3 py-1 rounded-full bg-blue-100 text-blue-800 text-sm font-medium mb-6">
@@ -15,7 +15,7 @@ const Hero = ({ visitorName }) => {
 
         {/* Title */}
         <h1 className="text-4xl md:text-6xl font-semibold text-gray-900 tracking-tight mb-4">
-          Rahiim Tahajjadan Zhaahir Haq
+          Rahiim Tahajjadanzhaahir Haq
         </h1>
 
         {/* Subtitle */}

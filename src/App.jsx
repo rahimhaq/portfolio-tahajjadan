@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import IntroGate from './components/IntroGate';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer'; // Import Footer
+import Footer from './components/Footer';
+import ScrollToTop from './components/ScrollToTop'; 
+
 import Home from './pages/Home';
 import About from './pages/About';
 import Projects from './pages/Projects';
@@ -35,8 +37,9 @@ function App() {
 
   return (
     <Router>
-      <div className="min-h-screen font-sans  flex flex-col">
-        {/* Navbar */}
+      <ScrollToTop /> 
+      
+      <div className="min-h-screen font-sans flex flex-col">
         <Navbar />
         
         <main className="flex-grow">
@@ -51,7 +54,6 @@ function App() {
           </Routes>
         </main>
 
-        {/* Gunakan Komponen Footer */}
         <Footer />
       </div>
     </Router>

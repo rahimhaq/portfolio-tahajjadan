@@ -11,7 +11,7 @@ const About = () => {
         <div className="grid md:grid-cols-2 gap-12 items-center">
           
           {/* Kolom Teks Pendidikan */}
-          <div className="order-2 md:order-1 space-y-6 relative z-10">
+          <div className="order-2 md:order-1 space-y-10 relative z-10 mb-auto">
             <span className="inline-block px-4 py-1.5 bg-blue-100 text-blue-700 rounded-full text-sm font-semibold tracking-wide uppercase">
               Academic Background
             </span>
@@ -30,8 +30,8 @@ const About = () => {
             </div>
 
             <p className="text-slate-600 leading-relaxed text-lg">
-              Focused on the convergence of Software, Networking, and Hardware. 
-              Certified Network Administrator (BNSP) with research experience intern in Satellite Technology Research Center (BRIN).
+              Focused on the convergence of Software, Embedded System and Internet of Things (IoT). 
+              Certified Network Administrator, Embedded System (BNSP) with research experience intern in Satellite Technology Research Center (BRIN).
             </p>
             
             {/* Dekorasi Panah Menunjuk ke Bawah (SVG Hand-drawn style) */}
