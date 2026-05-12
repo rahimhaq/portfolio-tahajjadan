@@ -126,7 +126,7 @@ const ProjectModal = ({ project, onClose }) => {
                    rel="noreferrer" 
                    className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 font-semibold transition shadow-lg shadow-blue-200 text-sm md:text-base"
                  >
-                   <ExternalLink size={18} /> <span className="hidden sm:inline">Kunjungi</span>
+                   <ExternalLink size={18} /> <span className="hidden sm:inline">Check</span>
                  </a>
                ) : (
                   <button disabled className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-200 text-gray-400 rounded-xl font-semibold cursor-not-allowed text-sm md:text-base">
