@@ -180,6 +180,90 @@ app.delete('/api/projects/:id', verifyAdmin, async (req, res) => {
   }
 });
 
+// --- EXPERIENCES ENDPOINTS ---
+
+// GET ALL EXPERIENCES
+app.get('/api/experiences', async (req, res) => {
+  try {
+    const experiences = await prisma.experience.findMany({ orderBy: { id: 'desc' } });
+    res.json(experiences);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Error fetching data" });
+  }
+});
+
+// CREATE (POST)
+app.post('/api/experiences', verifyAdmin, async (req, res) => {
+  try {
+    const { role, company, location, startDate, endDate, desc, skills, link } = req.body;
+
+    let skillsArray = [];
+    if (skills) {
+      if (typeof skills === 'string') {
+        try { skillsArray = JSON.parse(skills); } catch (e) { skillsArray = skills.split(',').map(s => s.trim()).filter(Boolean); }
+      } else if (Array.isArray(skills)) {
+        skillsArray = skills;
+      }
+    }
+
+    const newExperience = await prisma.experience.create({
+      data: {
+        role,
+        company,
+        location: location || null,
+        startDate,
+        endDate,
+        desc,
+        skills: skillsArray,
+        link: link || null,
+      },
+    });
+    res.status(201).json(newExperience);
+  } catch (error) {
+    console.error("Create Experience Error:", error);
+    res.status(500).json({ error: "Gagal menyimpan pengalaman kerja", details: error.message });
+  }
+});
+
+// UPDATE (PUT)
+app.put('/api/experiences/:id', verifyAdmin, async (req, res) => {
+  const { id } = req.params;
+  const { role, company, location, startDate, endDate, desc, skills, link } = req.body;
+
+  try {
+    let updateData = { role, company, location: location || null, startDate, endDate, desc, link: link || null };
+
+    if (skills) {
+      if (typeof skills === 'string') {
+        try { updateData.skills = JSON.parse(skills); } catch (e) { updateData.skills = skills.split(',').map(s => s.trim()).filter(Boolean); }
+      } else if (Array.isArray(skills)) {
+        updateData.skills = skills;
+      }
+    }
+
+    const updatedExperience = await prisma.experience.update({
+      where: { id: parseInt(id) },
+      data: updateData,
+    });
+    res.json(updatedExperience);
+  } catch (error) {
+    console.error("Update Experience Error:", error);
+    res.status(500).json({ error: "Gagal update pengalaman kerja", details: error.message });
+  }
+});
+
+// DELETE
+app.delete('/api/experiences/:id', verifyAdmin, async (req, res) => {
+  const { id } = req.params;
+  try {
+    await prisma.experience.delete({ where: { id: parseInt(id) } });
+    res.json({ message: "Deleted" });
+  } catch (error) {
+    res.status(500).json({ error: "Gagal hapus" });
+  }
+});
+
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => {
@@ -188,3 +272,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
+// Trigger Nodemon reload for updated Prisma client.

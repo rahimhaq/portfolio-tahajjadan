@@ -17,3 +17,16 @@ model Project {
   tech      String[]
   createdAt DateTime @default(now())
 }
+
+model Experience {
+  id        Int      @id @default(autoincrement())
+  role      String
+  company   String
+  location  String?
+  startDate String
+  endDate   String
+  desc      String
+  skills    String[] @default([])
+  link      String?
+  createdAt DateTime @default(now())
+}
