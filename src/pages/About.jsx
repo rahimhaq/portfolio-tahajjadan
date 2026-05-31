@@ -496,12 +496,14 @@ export const LeadershipSection = () => {
       {/* Timeline Item 1: ACC SV IPB (Kiri Gambar, Kanan Teks) */}
       <div className="flex flex-col md:flex-row items-center gap-10 mb-24 group">
         <div className="w-full md:w-1/2 flex justify-center md:justify-end relative">
-          <div className="w-72 h-52 bg-gray-200 rounded-xl shadow-lg transform -rotate-2 group-hover:rotate-0 transition duration-300 border-4 border-white overflow-hidden relative z-10">
-            <img src="/assets/acc-ipb.jpg" alt="ACC Activity" className="w-full h-full object-cover" />
-          </div>
-          {/* Sticker Effect */}
-          <div className="absolute -top-4 -right-4 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold border border-yellow-200 z-20 shadow-sm rotate-1">
-            Staff - Membership & Social Media
+          <div className="relative w-72 h-52">
+            <div className="w-full h-full bg-gray-200 rounded-xl shadow-lg transform -rotate-2 group-hover:rotate-0 transition duration-300 border-4 border-white overflow-hidden z-10">
+              <img src="/assets/acc-ipb.jpg" alt="ACC Activity" className="w-full h-full object-cover" />
+            </div>
+            {/* Sticker Effect */}
+            <div className="absolute -top-4 -right-4 bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-xs font-bold border border-yellow-200 z-20 shadow-sm rotate-1 whitespace-nowrap">
+              Staff - Membership & Social Media
+            </div>
           </div>
           {/* Panah Konektor */}
           <ArrowDownRight className="absolute -bottom-12 -right-12 text-slate-300 w-20 h-20 hidden md:block" strokeWidth={1.5} />
@@ -520,11 +522,13 @@ export const LeadershipSection = () => {
       {/* Timeline Item 2: DKM Al Ghifari (Kanan Gambar, Kiri Teks) */}
       <div className="flex flex-col md:flex-row-reverse items-center gap-10 mb-24 group">
         <div className="w-full md:w-1/2 flex justify-center md:justify-start relative">
-          <div className="w-72 h-52 bg-gray-200 rounded-xl shadow-lg transform rotate-3 group-hover:rotate-0 transition duration-300 border-4 border-white overflow-hidden relative z-10">
-            <img src="/assets/dkm-ghifari.jpg" alt="DKM Activity" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute -bottom-4 -left-4 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 z-20 shadow-sm -rotate-6">
-            Head of Takmir
+          <div className="relative w-72 h-52">
+            <div className="w-full h-full bg-gray-200 rounded-xl shadow-lg transform rotate-3 group-hover:rotate-0 transition duration-300 border-4 border-white overflow-hidden z-10">
+              <img src="/assets/dkm-ghifari.jpg" alt="DKM Activity" className="w-full h-full object-cover" />
+            </div>
+            <div className="absolute -bottom-4 -left-4 bg-green-100 text-green-700 px-3 py-1 rounded-full text-xs font-bold border border-green-200 z-20 shadow-sm -rotate-6 whitespace-nowrap">
+              Head of Takmir
+            </div>
           </div>
           {/* Panah Konektor Balik */}
           <svg className="absolute -bottom-16 -left-12 text-slate-300 w-24 h-24 hidden md:block transform scale-x-[-1]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
@@ -544,11 +548,13 @@ export const LeadershipSection = () => {
       {/* Timeline Item 3: LDK Al Ghifari (Kiri Gambar, Kanan Teks) */}
       <div className="flex flex-col md:flex-row items-center gap-10 group">
         <div className="w-full md:w-1/2 flex justify-center md:justify-end relative">
-          <div className="w-72 h-52 bg-gray-200 rounded-xl shadow-lg transform -rotate-2 group-hover:rotate-0 transition duration-300 border-4 border-white overflow-hidden z-10">
-            <img src="/assets/ldk-activity.jpg" alt="LDK Activity" className="w-full h-full object-cover" />
-          </div>
-          <div className="absolute -top-5 left-22 bg-purple-100 text-purple-700 px-4 py-1 rounded-full text-xs font-bold border border-purple-200 z-20 shadow-sm -rotate-10">
-            Head of Islamic Program Departement
+          <div className="relative w-72 h-52">
+            <div className="w-full h-full bg-gray-200 rounded-xl shadow-lg transform -rotate-2 group-hover:rotate-0 transition duration-300 border-4 border-white overflow-hidden z-10">
+              <img src="/assets/ldk-activity.jpg" alt="LDK Activity" className="w-full h-full object-cover" />
+            </div>
+            <div className="absolute -top-4 -left-4 bg-purple-100 text-purple-700 px-4 py-1 rounded-full text-xs font-bold border border-purple-200 z-20 shadow-sm -rotate-6 whitespace-nowrap">
+              Head of Islamic Program Departement
+            </div>
           </div>
         </div>
         <div className="w-full md:w-1/2 text-left">
