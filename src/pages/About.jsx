@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 export const AcademicSection = () => {
   return (
-    <div className="max-w-6xl mx-auto mb-32 relative">
+    <div className="max-w-6xl mx-auto mb-32 relative px-4 sm:px-6 lg:px-8">
       <div className="grid md:grid-cols-2 gap-12 items-center">
 
         {/* Kolom Teks Pendidikan */}
@@ -485,7 +485,7 @@ export const ExperienceSection = () => {
 
 export const LeadershipSection = () => {
   return (
-    <div className="max-w-5xl mx-auto relative">
+    <div className="max-w-5xl mx-auto relative px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-20">
         <h3 className="text-3xl font-bold text-slate-800 relative inline-block">
           Leadership & Organizational Experience

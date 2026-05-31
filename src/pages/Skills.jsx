@@ -83,7 +83,7 @@ const Skills = () => {
         Technical Skills
       </h2>
 
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Certifications & Competencies */}
         <div className="mb-20">
           <CertificationsSection />
