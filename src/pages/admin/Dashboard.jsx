@@ -44,6 +44,9 @@ const Dashboard = () => {
   const [skillsInput, setSkillsInput] = useState("");
   const [expDesc, setExpDesc] = useState("");
   const [expLink, setExpLink] = useState("");
+  const [expGalleryFiles, setExpGalleryFiles] = useState([]); // State untuk file gallery experience
+  const [expPreviewGallery, setExpPreviewGallery] = useState([]); // Preview gallery (URL strings or blob URLs)
+  const [expOrder, setExpOrder] = useState(0); // State untuk urutan posisi
 
   // --- AMBIL URL API DARI ENVIRONMENT VARIABLE ---
   // Jika .env tidak terbaca, fallback ke localhost (untuk safety dev)
@@ -189,6 +192,27 @@ const Dashboard = () => {
     if (fileInput) fileInput.value = "";
   };
 
+  const handleExpFileChange = (e) => {
+    const newFiles = e.target.files ? Array.from(e.target.files) : [];
+    if (newFiles.length === 0) return;
+
+    // Gabungkan file lama dengan file baru
+    const combinedFiles = [...expGalleryFiles, ...newFiles];
+
+    if (combinedFiles.length > 2) {
+      alert("❌ Maksimal hanya boleh mengunggah 2 foto untuk dokumentasi pengalaman!");
+      const slicedFiles = combinedFiles.slice(0, 2);
+      setExpGalleryFiles(slicedFiles);
+      const previewUrls = slicedFiles.map((file) => URL.createObjectURL(file));
+      setExpPreviewGallery(previewUrls);
+    } else {
+      setExpGalleryFiles(combinedFiles);
+      const previewUrls = combinedFiles.map((file) => URL.createObjectURL(file));
+      setExpPreviewGallery(previewUrls);
+    }
+    e.target.value = ""; // Reset input value agar bisa trigger event onChange jika memilih file yang sama
+  };
+
   const handleExpSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -199,17 +223,23 @@ const Dashboard = () => {
       .map((item) => item.trim())
       .filter((item) => item !== "");
 
-    const payload = {
-      role,
-      company,
-      location: location || null,
-      startDate,
-      endDate,
-      desc: expDesc,
-      skills: skillsArray,
-      link: expLink || null,
-      adminKey,
-    };
+    const formData = new FormData();
+    formData.append("role", role);
+    formData.append("company", company);
+    formData.append("location", location || "");
+    formData.append("startDate", startDate);
+    formData.append("endDate", endDate);
+    formData.append("desc", expDesc);
+    formData.append("skills", JSON.stringify(skillsArray));
+    formData.append("link", expLink || "");
+    formData.append("adminKey", adminKey);
+    formData.append("order", expOrder);
+
+    if (expGalleryFiles.length > 0) {
+      Array.from(expGalleryFiles).forEach((file) => {
+        formData.append("gallery", file);
+      });
+    }
 
     try {
       let url = `${API_URL}/api/experiences`;
@@ -222,8 +252,7 @@ const Dashboard = () => {
 
       const res = await fetch(url, {
         method: method,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
+        body: formData,
       });
 
       const data = await res.json();
@@ -250,6 +279,9 @@ const Dashboard = () => {
     setSkillsInput(exp.skills ? exp.skills.join(", ") : "");
     setExpDesc(exp.desc);
     setExpLink(exp.link || "");
+    setExpPreviewGallery(exp.gallery || []);
+    setExpGalleryFiles([]);
+    setExpOrder(exp.order || 0);
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
@@ -281,6 +313,11 @@ const Dashboard = () => {
     setSkillsInput("");
     setExpDesc("");
     setExpLink("");
+    setExpGalleryFiles([]);
+    setExpPreviewGallery([]);
+    setExpOrder(0);
+    const expFileInput = document.getElementById("expFileInput");
+    if (expFileInput) expFileInput.value = "";
   };
 
   const handleLogout = () => {
@@ -600,7 +637,7 @@ const Dashboard = () => {
                   </div>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-5">
+                <div className="grid md:grid-cols-4 gap-5">
                   <div>
                     <label className="label-style">Location</label>
                     <input
@@ -628,6 +665,17 @@ const Dashboard = () => {
                       onChange={(e) => setEndDate(e.target.value)}
                       className="input-style"
                       placeholder="e.g., May 2024 or Present"
+                    />
+                  </div>
+                  <div>
+                    <label className="label-style">Urutan Posisi (Order)</label>
+                    <input
+                      type="number"
+                      required
+                      value={expOrder}
+                      onChange={(e) => setExpOrder(parseInt(e.target.value) || 0)}
+                      className="input-style"
+                      placeholder="e.g., 1"
                     />
                   </div>
                 </div>
@@ -662,6 +710,79 @@ const Dashboard = () => {
                     placeholder="e.g., https://company.com"
                   />
                 </div>
+
+                {/* INPUT GALLERY DOKUMENTASI EXPERIENCE */}
+                <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:bg-gray-50 transition relative">
+                  <input
+                    id="expFileInput"
+                    type="file"
+                    multiple
+                    accept="image/*,application/pdf"
+                    onChange={handleExpFileChange}
+                    className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                  />
+                  <div className="flex flex-col items-center justify-center gap-2 text-gray-500">
+                    <UploadCloud size={32} className="text-blue-500" />
+                    <span className="font-medium text-sm font-semibold text-gray-700">
+                      Upload Galeri Dokumentasi / Sertifikat Magang
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      JPG, PNG, WebP, PDF (Maksimal 2 file dokumentasi)
+                    </span>
+                    <span className="text-xs text-blue-600 font-semibold bg-blue-50 px-2.5 py-0.5 rounded-full mt-1">
+                      {expGalleryFiles && expGalleryFiles.length > 0
+                        ? `${expGalleryFiles.length} dari 2 file dipilih`
+                        : "Pilih berkas (Max 2)..."}
+                    </span>
+                  </div>
+                </div>
+
+                {/* PREVIEW GALLERY DOKUMENTASI */}
+                {expPreviewGallery && expPreviewGallery.length > 0 && (
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <label className="label-style mb-0">Gallery Preview ({expPreviewGallery.length}/2)</label>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setExpGalleryFiles([]);
+                          setExpPreviewGallery([]);
+                          const expFileInput = document.getElementById("expFileInput");
+                          if (expFileInput) expFileInput.value = "";
+                        }}
+                        className="text-xs text-red-500 hover:text-red-700 font-bold transition duration-200"
+                      >
+                        Hapus Semua
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border">
+                      {expPreviewGallery.map((url, i) => {
+                        const isPdf = url.toLowerCase().endsWith('.pdf') || (url.startsWith('blob:') && expGalleryFiles[i]?.type === 'application/pdf');
+                        return (
+                          <div key={i} className="relative w-full aspect-video bg-white rounded-lg overflow-hidden border shadow-sm group">
+                            {isPdf ? (
+                              <div className="w-full h-full flex flex-col items-center justify-center bg-red-50 text-red-500 p-2">
+                                <span className="text-[10px] font-bold uppercase">PDF DOCUMENT</span>
+                                <span className="text-[9px] text-gray-500 truncate max-w-full px-1">
+                                  {expGalleryFiles[i]?.name || 'Certificate'}
+                                </span>
+                              </div>
+                            ) : (
+                              <img
+                                src={url}
+                                alt={`Preview ${i}`}
+                                className="w-full h-full object-cover"
+                              />
+                            )}
+                            <div className="absolute top-1 right-1 bg-black/55 text-white text-[9px] px-1.5 py-0.5 rounded">
+                              {i + 1}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
                 <button
                   type="submit"
@@ -703,12 +824,36 @@ const Dashboard = () => {
                         <p className="text-sm font-semibold text-blue-600 mt-0.5">
                           {item.company} {item.location ? `• ${item.location}` : ""}
                         </p>
-                        <p className="text-xs text-gray-500 mt-1">
-                          {item.startDate} - {item.endDate}
+                        <p className="text-xs text-gray-500 mt-1 flex items-center gap-2">
+                          <span>{item.startDate} - {item.endDate}</span>
+                          {item.order !== undefined && (
+                            <span className="px-2 py-0.5 bg-blue-50 text-blue-600 rounded font-bold text-[9px] uppercase tracking-wider">
+                              Order: #{item.order}
+                            </span>
+                          )}
                         </p>
                         <p className="text-xs text-gray-600 line-clamp-2 max-w-[500px] mt-2 whitespace-pre-line">
                           {item.desc}
                         </p>
+                        {item.gallery && item.gallery.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mt-2.5">
+                            {item.gallery.map((gImg, gIdx) => {
+                              const isPdf = gImg.toLowerCase().endsWith('.pdf');
+                              return (
+                                <div key={gIdx} className="w-8 h-8 rounded border overflow-hidden bg-gray-100 flex items-center justify-center">
+                                  {isPdf ? (
+                                    <div className="w-full h-full bg-red-100 text-red-700 flex items-center justify-center text-[7px] font-bold">PDF</div>
+                                  ) : (
+                                    <img src={gImg} alt="" className="w-full h-full object-cover" />
+                                  )}
+                                </div>
+                              );
+                            })}
+                            <span className="text-[10px] text-gray-500 font-bold self-center ml-1">
+                              ({item.gallery.length} files)
+                            </span>
+                          </div>
+                        )}
                       </div>
                       <div className="flex gap-2 mt-4 md:mt-0 w-full md:w-auto justify-end">
                         <button

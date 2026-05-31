@@ -54,6 +54,11 @@ const uploadMiddleware = upload.fields([
   { name: 'gallery', maxCount: 10 }
 ]);
 
+// Middleware untuk upload gallery experience (Maksimal 2 file)
+const expUploadMiddleware = upload.fields([
+  { name: 'gallery', maxCount: 2 }
+]);
+
 // --- PERUBAHAN 2: HELPER FUNCTION UPLOAD ---
 // Fungsi ini dipisah agar bisa dipakai untuk upload cover maupun loop gallery
 const uploadToCloudinary = (buffer) => {
@@ -185,7 +190,12 @@ app.delete('/api/projects/:id', verifyAdmin, async (req, res) => {
 // GET ALL EXPERIENCES
 app.get('/api/experiences', async (req, res) => {
   try {
-    const experiences = await prisma.experience.findMany({ orderBy: { id: 'desc' } });
+    const experiences = await prisma.experience.findMany({ 
+      orderBy: [
+        { order: 'asc' },
+        { id: 'desc' }
+      ]
+    });
     res.json(experiences);
   } catch (error) {
     console.error(error);
@@ -194,9 +204,21 @@ app.get('/api/experiences', async (req, res) => {
 });
 
 // CREATE (POST)
-app.post('/api/experiences', verifyAdmin, async (req, res) => {
+app.post('/api/experiences', expUploadMiddleware, verifyAdmin, async (req, res) => {
   try {
-    const { role, company, location, startDate, endDate, desc, skills, link } = req.body;
+    const { role, company, location, startDate, endDate, desc, skills, link, order } = req.body;
+
+    // Validasi: Maksimal 2 foto
+    if (req.files && req.files['gallery'] && req.files['gallery'].length > 2) {
+        return res.status(400).json({ error: "Maksimal hanya boleh mengunggah 2 foto untuk dokumentasi!" });
+    }
+
+    // Upload Gallery Images (Jika ada)
+    let galleryUrls = [];
+    if (req.files && req.files['gallery']) {
+        const uploadPromises = req.files['gallery'].map(file => uploadToCloudinary(file.buffer));
+        galleryUrls = await Promise.all(uploadPromises);
+    }
 
     let skillsArray = [];
     if (skills) {
@@ -217,6 +239,8 @@ app.post('/api/experiences', verifyAdmin, async (req, res) => {
         desc,
         skills: skillsArray,
         link: link || null,
+        gallery: galleryUrls,
+        order: parseInt(order) || 0,
       },
     });
     res.status(201).json(newExperience);
@@ -227,12 +251,21 @@ app.post('/api/experiences', verifyAdmin, async (req, res) => {
 });
 
 // UPDATE (PUT)
-app.put('/api/experiences/:id', verifyAdmin, async (req, res) => {
+app.put('/api/experiences/:id', expUploadMiddleware, verifyAdmin, async (req, res) => {
   const { id } = req.params;
-  const { role, company, location, startDate, endDate, desc, skills, link } = req.body;
+  const { role, company, location, startDate, endDate, desc, skills, link, order } = req.body;
 
   try {
     let updateData = { role, company, location: location || null, startDate, endDate, desc, link: link || null };
+
+    // Validasi: Maksimal 2 foto
+    if (req.files && req.files['gallery'] && req.files['gallery'].length > 2) {
+        return res.status(400).json({ error: "Maksimal hanya boleh mengunggah 2 foto untuk dokumentasi!" });
+    }
+
+    if (order !== undefined) {
+      updateData.order = parseInt(order) || 0;
+    }
 
     if (skills) {
       if (typeof skills === 'string') {
@@ -240,6 +273,12 @@ app.put('/api/experiences/:id', verifyAdmin, async (req, res) => {
       } else if (Array.isArray(skills)) {
         updateData.skills = skills;
       }
+    }
+
+    // Upload Gallery Images (Jika ada)
+    if (req.files && req.files['gallery']) {
+        const uploadPromises = req.files['gallery'].map(file => uploadToCloudinary(file.buffer));
+        updateData.gallery = await Promise.all(uploadPromises);
     }
 
     const updatedExperience = await prisma.experience.update({
@@ -272,4 +311,4 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 module.exports = app;
-// Trigger Nodemon reload for updated Prisma client.
+// Trigger Nodemon reload for updated Prisma client - v3.

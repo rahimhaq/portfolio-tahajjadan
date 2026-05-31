@@ -31,10 +31,10 @@ const Hero = ({ visitorName }) => {
         {/* CTA */}
         <div className="flex flex-col sm:flex-row justify-center gap-4 w-full sm:w-auto px-4 sm:px-0">
           <Link
-            to="/projects"
+            to="/experience"
             className="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition shadow-lg shadow-blue-200 flex items-center justify-center gap-2"
           >
-            My Projects <ArrowRight size={20} />
+            My Experience <ArrowRight size={20} />
           </Link>
 
           <Link

@@ -46,7 +46,7 @@ function App() {
           <Routes>
             <Route path="/" element={<Home visitorName={visitorName} />} />
             <Route path="/about" element={<div className="pt-16"><About /></div>} />
-            <Route path="/projects" element={<div className="pt-16"><Projects /></div>} />
+            <Route path="/experience" element={<div className="pt-16"><Projects /></div>} />
             <Route path="/skills" element={<div className="pt-16"><Skills /></div>} />
             <Route path="/contact" element={<div className="pt-16"><Contact /></div>} />
             <Route path="/admin/login" element={<Login />} />

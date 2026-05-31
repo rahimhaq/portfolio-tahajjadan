@@ -28,5 +28,7 @@ model Experience {
   desc      String
   skills    String[] @default([])
   link      String?
+  gallery   String[] @default([])
+  order     Int      @default(0)
   createdAt DateTime @default(now())
 }
