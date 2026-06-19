@@ -16,6 +16,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(false);
   const [projects, setProjects] = useState([]);
   const [experiences, setExperiences] = useState([]);
+  const [visitors, setVisitors] = useState([]);
   const [activeTab, setActiveTab] = useState("projects");
 
   const [isEditing, setIsEditing] = useState(false);
@@ -58,6 +59,7 @@ const Dashboard = () => {
     else {
       fetchProjects();
       fetchExperiences();
+      fetchVisitors();
     }
   }, [navigate]);
 
@@ -79,6 +81,43 @@ const Dashboard = () => {
       setExperiences(data);
     } catch (error) {
       console.error("Gagal load experiences");
+    }
+  };
+
+  const fetchVisitors = async () => {
+    try {
+      const adminKey = sessionStorage.getItem("adminKey");
+      const res = await fetch(`${API_URL}/api/visitors?adminKey=${adminKey}`);
+      const data = await res.json();
+      if (res.ok) {
+        setVisitors(data);
+      } else {
+        console.error("Gagal load visitors:", data.error);
+      }
+    } catch (error) {
+      console.error("Gagal load visitors:", error);
+    }
+  };
+
+  const handleDeleteAllVisitors = async () => {
+    if (!window.confirm("Yakin ingin menghapus semua data riwayat pengunjung? Tindakan ini tidak bisa dibatalkan.")) return;
+    const adminKey = sessionStorage.getItem("adminKey");
+    setLoading(true);
+    try {
+      const res = await fetch(`${API_URL}/api/visitors?adminKey=${adminKey}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (res.ok) {
+        alert("✅ Berhasil menghapus semua riwayat pengunjung!");
+        fetchVisitors();
+      } else {
+        throw new Error(data.error || "Gagal menghapus");
+      }
+    } catch (error) {
+      alert("❌ Error: " + error.message);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -330,7 +369,7 @@ const Dashboard = () => {
       <div className="max-w-4xl mx-auto space-y-8">
         {/* HEADER */}
         <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100">
-          <h1 className="text-2xl font-bold text-gray-800">Dashboard Admin</h1>
+          <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
           <div className="flex gap-2">
             <button
               onClick={() => navigate("/")}
@@ -355,13 +394,12 @@ const Dashboard = () => {
               resetForm();
               resetExpForm();
             }}
-            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${
-              activeTab === "projects"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-100"
-                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-            }`}
+            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${activeTab === "projects"
+              ? "bg-blue-600 text-white shadow-md shadow-blue-100"
+              : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+              }`}
           >
-            Manage Projects
+            Projects
           </button>
           <button
             onClick={() => {
@@ -369,13 +407,26 @@ const Dashboard = () => {
               resetForm();
               resetExpForm();
             }}
-            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${
-              activeTab === "experiences"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-100"
-                : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
-            }`}
+            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${activeTab === "experiences"
+              ? "bg-blue-600 text-white shadow-md shadow-blue-100"
+              : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+              }`}
           >
-            Manage Experiences
+            Experiences
+          </button>
+          <button
+            onClick={() => {
+              setActiveTab("visitors");
+              resetForm();
+              resetExpForm();
+              fetchVisitors();
+            }}
+            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${activeTab === "visitors"
+              ? "bg-blue-600 text-white shadow-md shadow-blue-100"
+              : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
+              }`}
+          >
+            Visitor Logs
           </button>
         </div>
 
@@ -384,9 +435,8 @@ const Dashboard = () => {
             {/* FORM INPUT PROJECT */}
             <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8 relative overflow-hidden">
               <div
-                className={`absolute top-0 left-0 w-1.5 h-full ${
-                  isEditing ? "bg-yellow-500" : "bg-blue-600"
-                }`}
+                className={`absolute top-0 left-0 w-1.5 h-full ${isEditing ? "bg-yellow-500" : "bg-blue-600"
+                  }`}
               ></div>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -524,11 +574,10 @@ const Dashboard = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg ${
-                    isEditing
-                      ? "bg-yellow-500 hover:bg-yellow-600 shadow-yellow-200"
-                      : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
-                  }`}
+                  className={`w-full text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg ${isEditing
+                    ? "bg-yellow-500 hover:bg-yellow-600 shadow-yellow-200"
+                    : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
+                    }`}
                 >
                   {loading ? (
                     "Mengupload..."
@@ -585,14 +634,13 @@ const Dashboard = () => {
               </div>
             </div>
           </>
-        ) : (
+        ) : activeTab === "experiences" ? (
           <>
             {/* FORM INPUT EXPERIENCE */}
             <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8 relative overflow-hidden">
               <div
-                className={`absolute top-0 left-0 w-1.5 h-full ${
-                  isEditingExp ? "bg-yellow-500" : "bg-blue-600"
-                }`}
+                className={`absolute top-0 left-0 w-1.5 h-full ${isEditingExp ? "bg-yellow-500" : "bg-blue-600"
+                  }`}
               ></div>
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -787,11 +835,10 @@ const Dashboard = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className={`w-full text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg ${
-                    isEditingExp
-                      ? "bg-yellow-500 hover:bg-yellow-600 shadow-yellow-200"
-                      : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
-                  }`}
+                  className={`w-full text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2 shadow-lg ${isEditingExp
+                    ? "bg-yellow-500 hover:bg-yellow-600 shadow-yellow-200"
+                    : "bg-blue-600 hover:bg-blue-700 shadow-blue-200"
+                    }`}
                 >
                   {loading ? (
                     "Saving..."
@@ -875,6 +922,70 @@ const Dashboard = () => {
               </div>
             </div>
           </>
+        ) : (
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+            <div className="flex justify-between items-center mb-6 border-b pb-4">
+              <h3 className="text-xl font-bold text-gray-800">
+                Visitor History ({visitors.length})
+              </h3>
+              {visitors.length > 0 && (
+                <button
+                  onClick={handleDeleteAllVisitors}
+                  disabled={loading}
+                  className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition flex items-center gap-1.5 text-sm font-semibold disabled:opacity-50"
+                >
+                  <Trash2 size={16} /> Delete All of History
+                </button>
+              )}
+            </div>
+
+            <div className="space-y-4 max-h-[600px] overflow-y-auto pr-2">
+              {visitors.length === 0 ? (
+                <p className="text-gray-500 text-center py-8">
+                  Belum ada data pengunjung yang tercatat.
+                </p>
+              ) : (
+                visitors.map((visitor) => (
+                  <div
+                    key={visitor.id}
+                    className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-blue-100 transition bg-gray-50/50"
+                  >
+                    <div className="flex items-center gap-4">
+                      {/* Initials Avatar */}
+                      <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shadow-inner uppercase">
+                        {visitor.name.slice(0, 2)}
+                      </div>
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <h4 className="font-bold text-gray-800 text-base">
+                            {visitor.name}
+                          </h4>
+                          <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider ${visitor.role === 'HR / Recruiter'
+                            ? 'bg-orange-100 text-orange-700'
+                            : 'bg-blue-100 text-blue-700'
+                            }`}>
+                            {visitor.role === 'HR / Recruiter' ? 'HR' : 'Guest'}
+                          </span>
+                        </div>
+                        <p className="text-xs text-gray-500 mt-1">
+                          Interest : <span className="font-semibold text-gray-700">{visitor.target || "Website keseluruhan"}</span>
+                        </p>
+                        <p className="text-[10px] text-gray-400 mt-0.5">
+                          ID: #{visitor.id}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="text-right text-xs text-gray-500 font-medium bg-white px-3 py-1.5 rounded-lg border border-gray-100">
+                      {new Date(visitor.createdAt).toLocaleString("id-ID", {
+                        dateStyle: "medium",
+                        timeStyle: "short",
+                      })}
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          </div>
         )}
       </div>
       <style>{`.label-style { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; } .input-style { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; outline: none; transition: all; } .input-style:focus { border-color: #3b82f6; ring: 2px; ring-color: #bfdbfe; }`}</style>

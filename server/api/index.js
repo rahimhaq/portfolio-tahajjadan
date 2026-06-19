@@ -76,7 +76,7 @@ const uploadToCloudinary = (buffer) => {
 
 // Middleware Verify Admin
 const verifyAdmin = (req, res, next) => {
-  const { adminKey } = req.body;
+  const adminKey = (req.body && req.body.adminKey) || req.query.adminKey;
   
   if (!process.env.ADMIN_PASSWORD) {
      return res.status(500).json({ error: "Server Error: ADMIN_PASSWORD not set" });
@@ -86,6 +86,11 @@ const verifyAdmin = (req, res, next) => {
   }
   next();
 };
+
+// VERIFY ADMIN PASSWORD
+app.post('/api/admin/verify', verifyAdmin, (req, res) => {
+  res.json({ success: true });
+});
 
 // GET ALL PROJECTS
 app.get('/api/projects', async (req, res) => {
@@ -300,6 +305,53 @@ app.delete('/api/experiences/:id', verifyAdmin, async (req, res) => {
     res.json({ message: "Deleted" });
   } catch (error) {
     res.status(500).json({ error: "Gagal hapus" });
+  }
+});
+
+// --- VISITORS LOG ENDPOINTS ---
+
+// CREATE VISITOR LOG (Public)
+app.post('/api/visitors', async (req, res) => {
+  const { name, role, target } = req.body;
+  if (!name || !name.trim()) {
+    return res.status(400).json({ error: "Nama wajib diisi!" });
+  }
+  try {
+    const newVisitor = await prisma.visitor.create({
+      data: { 
+        name: name.trim(),
+        role: role || "Orang biasa",
+        target: target || "Website keseluruhan",
+      },
+    });
+    res.status(201).json(newVisitor);
+  } catch (error) {
+    console.error("Gagal menyimpan data pengunjung:", error);
+    res.status(500).json({ error: "Gagal menyimpan data pengunjung" });
+  }
+});
+
+// GET ALL VISITORS (Admin Only)
+app.get('/api/visitors', verifyAdmin, async (req, res) => {
+  try {
+    const visitors = await prisma.visitor.findMany({
+      orderBy: { createdAt: 'desc' },
+    });
+    res.json(visitors);
+  } catch (error) {
+    console.error("Gagal mengambil data pengunjung:", error);
+    res.status(500).json({ error: "Gagal mengambil data pengunjung" });
+  }
+});
+
+// DELETE ALL VISITORS (Admin Only)
+app.delete('/api/visitors', verifyAdmin, async (req, res) => {
+  try {
+    await prisma.visitor.deleteMany();
+    res.json({ message: "Semua data pengunjung berhasil dihapus" });
+  } catch (error) {
+    console.error("Gagal menghapus data pengunjung:", error);
+    res.status(500).json({ error: "Gagal menghapus data pengunjung" });
   }
 });
 

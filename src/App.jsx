@@ -4,6 +4,7 @@ import IntroGate from './components/IntroGate';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import ScrollToTop from './components/ScrollToTop'; 
+import { Analytics } from '@vercel/analytics/react';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -25,10 +26,13 @@ function App() {
     }
   }, []);
 
-  const handleIntroComplete = (name) => {
+  const handleIntroComplete = (name, targetPath) => {
     setVisitorName(name);
     setIsIntroComplete(true);
     sessionStorage.setItem('visitorName', name);
+    if (targetPath && targetPath !== '/') {
+      window.history.pushState({}, '', targetPath);
+    }
   };
 
   if (!isIntroComplete) {
@@ -38,6 +42,7 @@ function App() {
   return (
     <Router>
       <ScrollToTop /> 
+      <Analytics />
       
       <div className="min-h-screen font-sans flex flex-col">
         <Navbar />
