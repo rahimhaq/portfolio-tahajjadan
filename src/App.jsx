@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import IntroGate from './components/IntroGate';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -17,6 +17,7 @@ import Dashboard from './pages/admin/Dashboard';
 function App() {
   const [isIntroComplete, setIsIntroComplete] = useState(false);
   const [visitorName, setVisitorName] = useState('');
+  const location = useLocation();
 
   useEffect(() => {
     const savedName = sessionStorage.getItem('visitorName');
@@ -39,29 +40,31 @@ function App() {
     return <IntroGate onComplete={handleIntroComplete} />;
   }
 
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
   return (
-    <Router>
+    <>
       <ScrollToTop /> 
       <Analytics />
       
       <div className="min-h-screen font-sans flex flex-col">
-        <Navbar />
+        {!isAdminRoute && <Navbar />}
         
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<Home visitorName={visitorName} />} />
-            <Route path="/about" element={<div className="pt-16"><About /></div>} />
-            <Route path="/experience" element={<div className="pt-16"><Projects /></div>} />
-            <Route path="/skills" element={<div className="pt-16"><Skills /></div>} />
-            <Route path="/contact" element={<div className="pt-16"><Contact /></div>} />
+            <Route path="/about" element={<div className={isAdminRoute ? "" : "pt-16"}><About /></div>} />
+            <Route path="/experience" element={<div className={isAdminRoute ? "" : "pt-16"}><Projects /></div>} />
+            <Route path="/skills" element={<div className={isAdminRoute ? "" : "pt-16"}><Skills /></div>} />
+            <Route path="/contact" element={<div className={isAdminRoute ? "" : "pt-16"}><Contact /></div>} />
             <Route path="/admin/login" element={<Login />} />
             <Route path="/admin/dashboard" element={<Dashboard />} />
           </Routes>
         </main>
 
-        <Footer />
+        {!isAdminRoute && <Footer />}
       </div>
-    </Router>
+    </>
   );
 }
 

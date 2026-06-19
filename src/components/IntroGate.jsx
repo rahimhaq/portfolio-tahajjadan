@@ -189,7 +189,7 @@ const IntroGate = ({ onComplete }) => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name..."
-                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500 transition-all text-sm sm:text-base text-gray-800"
+                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500 transition-all text-base text-gray-800"
                     autoFocus
                     required
                   />

@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body, #root {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 /* Custom Background Grid Biru */
 body {
   background-color: #ffffff; /* blue-50 sebagai dasar */

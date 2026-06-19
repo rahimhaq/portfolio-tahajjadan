@@ -365,7 +365,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4">
+    <div className="min-h-screen bg-gray-50 pt-12 pb-12 px-4 sm:px-6">
       <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         {/* HEADER */}
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
@@ -987,7 +987,7 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-      <style>{`.label-style { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; } .input-style { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; outline: none; transition: all; } .input-style:focus { border-color: #3b82f6; ring: 2px; ring-color: #bfdbfe; }`}</style>
+      <style>{`.label-style { display: block; font-size: 0.875rem; font-weight: 500; color: #374151; margin-bottom: 0.5rem; } .input-style { width: 100%; padding: 0.75rem 1rem; border: 1px solid #e5e7eb; border-radius: 0.5rem; outline: none; font-size: 1rem; transition: all; } .input-style:focus { border-color: #3b82f6; ring: 2px; ring-color: #bfdbfe; }`}</style>
     </div>
   );
 };
