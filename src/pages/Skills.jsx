@@ -30,7 +30,7 @@ export const CertificationsSection = () => {
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <a
-          href="/certificates/Network_Administrator_BNSP.pdf"
+          href="https://drive.google.com/file/d/1lJH-1AhZW_keYhwCHijJpbu605ACmCRE/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center hover:-translate-y-1 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-center min-h-[110px] cursor-pointer group relative overflow-hidden"
@@ -44,7 +44,7 @@ export const CertificationsSection = () => {
         </a>
 
         <a
-          // href="/certificates/Embedded_System_BNSP.pdf" 
+          href="https://drive.google.com/file/d/1AsdFNEbHbEClOqwZO0B3F-c91YU9TqFs/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center hover:-translate-y-1 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-center min-h-[110px] cursor-pointer group relative overflow-hidden"
@@ -58,7 +58,7 @@ export const CertificationsSection = () => {
         </a>
 
         <a
-          href="/certificates/Cyber_Security_BisaAI.pdf"
+          href="https://drive.google.com/file/d/1M7AMf5hwZUvB0_vHkjAyQ2YYnMc4wct-/view?usp=sharing"
           target="_blank"
           rel="noopener noreferrer"
           className="bg-white p-4 rounded-lg shadow-sm border border-slate-200 text-center hover:-translate-y-1 hover:border-blue-400 hover:shadow-md transition flex flex-col justify-center min-h-[110px] cursor-pointer group relative overflow-hidden"

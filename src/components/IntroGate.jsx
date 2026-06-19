@@ -4,15 +4,13 @@ import { Send, User } from "lucide-react";
 
 const IntroGate = ({ onComplete }) => {
   const [name, setName] = useState("");
-  // State: 0 = Bot Nanya, 2 = Salam & Selesai
   const [step, setStep] = useState(0);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (name.trim()) {
-      setStep(2); // Pindah ke tahap salam
-      
-      // Tunggu 2 detik lalu buka gerbang
+      setStep(2);
+
       setTimeout(() => {
         onComplete(name);
       }, 2000);
@@ -22,14 +20,14 @@ const IntroGate = ({ onComplete }) => {
   return (
     // Z-INDEX ditingkatkan ke 100 agar menutupi Navbar (z-50)
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-50/95 backdrop-blur-sm px-4">
-      
+
       {/* Container: w-full tapi dibatasi max-w-md, responsif di HP */}
-      <motion.div 
+      <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden"
       >
-        
+
         {/* Header Chat */}
         <div className="bg-blue-600 p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 shadow-inner">
@@ -44,7 +42,7 @@ const IntroGate = ({ onComplete }) => {
         <div className="p-6">
           {/* Area Percakapan */}
           <div className="space-y-4 min-h-[140px]">
-            
+
             {/* Pesan Bot Pertama */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
@@ -78,7 +76,7 @@ const IntroGate = ({ onComplete }) => {
                 className="flex gap-3"
               >
                 <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-sm shadow-sm">
-                  Pleased to know you, <span className="font-bold text-blue-600">{name}</span>! Please come in... 
+                  Pleased to know you, <span className="font-bold text-blue-600">{name}</span>! Please come in...
                 </div>
               </motion.div>
             )}
@@ -86,11 +84,11 @@ const IntroGate = ({ onComplete }) => {
 
           {/* Input Form */}
           {step < 2 && (
-            <motion.form 
+            <motion.form
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              onSubmit={handleSubmit} 
+              onSubmit={handleSubmit}
               className="mt-6 flex gap-2 items-center"
             >
               <div className="relative flex-1 group">
@@ -119,7 +117,7 @@ const IntroGate = ({ onComplete }) => {
             </motion.form>
           )}
         </div>
-        
+
         {/* Footer decoration */}
         <div className="h-1 w-full bg-gradient-to-r from-blue-400 via-blue-600 to-blue-400"></div>
       </motion.div>
