@@ -366,11 +366,11 @@ const Dashboard = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 pt-24 pb-12 px-4">
-      <div className="max-w-4xl mx-auto space-y-8">
+      <div className="max-w-4xl mx-auto space-y-6 sm:space-y-8">
         {/* HEADER */}
-        <div className="flex justify-between items-center bg-white p-4 rounded-xl shadow-sm border border-gray-100">
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 bg-white p-4 rounded-xl shadow-sm border border-gray-100">
           <h1 className="text-2xl font-bold text-gray-800">Admin Dashboard</h1>
-          <div className="flex gap-2">
+          <div className="flex gap-2 justify-end sm:justify-start">
             <button
               onClick={() => navigate("/")}
               className="p-2 text-gray-500 hover:text-blue-600"
@@ -387,14 +387,14 @@ const Dashboard = () => {
         </div>
 
         {/* TAB SELECTOR */}
-        <div className="flex bg-white p-1.5 rounded-xl shadow-sm border border-gray-100 gap-2">
+        <div className="flex bg-white p-1.5 rounded-xl shadow-sm border border-gray-100 gap-1.5 sm:gap-2">
           <button
             onClick={() => {
               setActiveTab("projects");
               resetForm();
               resetExpForm();
             }}
-            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${activeTab === "projects"
+            className={`flex-1 py-2.5 sm:py-3 text-center text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 ${activeTab === "projects"
               ? "bg-blue-600 text-white shadow-md shadow-blue-100"
               : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
               }`}
@@ -407,7 +407,7 @@ const Dashboard = () => {
               resetForm();
               resetExpForm();
             }}
-            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${activeTab === "experiences"
+            className={`flex-1 py-2.5 sm:py-3 text-center text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 ${activeTab === "experiences"
               ? "bg-blue-600 text-white shadow-md shadow-blue-100"
               : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
               }`}
@@ -417,11 +417,10 @@ const Dashboard = () => {
           <button
             onClick={() => {
               setActiveTab("visitors");
-              resetForm();
               resetExpForm();
               fetchVisitors();
             }}
-            className={`flex-1 py-3 text-center font-bold rounded-lg transition-all duration-200 ${activeTab === "visitors"
+            className={`flex-1 py-2.5 sm:py-3 text-center text-xs sm:text-sm font-bold rounded-lg transition-all duration-200 ${activeTab === "visitors"
               ? "bg-blue-600 text-white shadow-md shadow-blue-100"
               : "text-gray-600 hover:text-blue-600 hover:bg-gray-50"
               }`}
@@ -433,7 +432,7 @@ const Dashboard = () => {
         {activeTab === "projects" ? (
           <>
             {/* FORM INPUT PROJECT */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8 relative overflow-hidden">
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-8 relative overflow-hidden">
               <div
                 className={`absolute top-0 left-0 w-1.5 h-full ${isEditing ? "bg-yellow-500" : "bg-blue-600"
                   }`}
@@ -592,7 +591,7 @@ const Dashboard = () => {
             </div>
 
             {/* LIST PROJECT */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-8">
               <h3 className="text-lg font-bold text-gray-800 mb-6 border-b pb-2">
                 Daftar Project ({projects.length})
               </h3>
@@ -600,7 +599,7 @@ const Dashboard = () => {
                 {projects.map((item) => (
                   <div
                     key={item.id}
-                    className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition bg-gray-50/50"
+                    className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition bg-gray-50/50 gap-4"
                   >
                     <div className="flex items-center gap-4 w-full md:w-auto">
                       <img
@@ -637,7 +636,7 @@ const Dashboard = () => {
         ) : activeTab === "experiences" ? (
           <>
             {/* FORM INPUT EXPERIENCE */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8 relative overflow-hidden">
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-8 relative overflow-hidden">
               <div
                 className={`absolute top-0 left-0 w-1.5 h-full ${isEditingExp ? "bg-yellow-500" : "bg-blue-600"
                   }`}
@@ -803,7 +802,7 @@ const Dashboard = () => {
                         Hapus Semua
                       </button>
                     </div>
-                    <div className="grid grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 bg-gray-50 p-4 rounded-xl border">
                       {expPreviewGallery.map((url, i) => {
                         const isPdf = url.toLowerCase().endsWith('.pdf') || (url.startsWith('blob:') && expGalleryFiles[i]?.type === 'application/pdf');
                         return (
@@ -853,7 +852,7 @@ const Dashboard = () => {
             </div>
 
             {/* LIST EXPERIENCE */}
-            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
+            <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-8">
               <h3 className="text-lg font-bold text-gray-800 mb-6 border-b pb-2">
                 Experiences List ({experiences.length})
               </h3>
@@ -864,7 +863,7 @@ const Dashboard = () => {
                   experiences.map((item) => (
                     <div
                       key={item.id}
-                      className="flex flex-col md:flex-row items-center justify-between p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition bg-gray-50/50"
+                      className="flex flex-col md:flex-row items-start md:items-center justify-between p-4 border border-gray-100 rounded-lg hover:border-blue-200 transition bg-gray-50/50 gap-4"
                     >
                       <div className="flex flex-col w-full md:w-auto text-left">
                         <h4 className="font-bold text-gray-800 text-lg">{item.role}</h4>
@@ -923,8 +922,8 @@ const Dashboard = () => {
             </div>
           </>
         ) : (
-          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-8">
-            <div className="flex justify-between items-center mb-6 border-b pb-4">
+          <div className="bg-white rounded-xl shadow-md border border-gray-100 p-5 sm:p-8">
+            <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-4 mb-6 border-b pb-4">
               <h3 className="text-xl font-bold text-gray-800">
                 Visitor History ({visitors.length})
               </h3>
@@ -932,7 +931,7 @@ const Dashboard = () => {
                 <button
                   onClick={handleDeleteAllVisitors}
                   disabled={loading}
-                  className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition flex items-center gap-1.5 text-sm font-semibold disabled:opacity-50"
+                  className="px-4 py-2 bg-red-100 text-red-600 rounded-lg hover:bg-red-200 transition flex items-center gap-1.5 text-sm font-semibold disabled:opacity-50 w-full sm:w-auto justify-center"
                 >
                   <Trash2 size={16} /> Delete All of History
                 </button>
@@ -948,11 +947,11 @@ const Dashboard = () => {
                 visitors.map((visitor) => (
                   <div
                     key={visitor.id}
-                    className="flex items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-blue-100 transition bg-gray-50/50"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border border-gray-100 rounded-xl hover:border-blue-100 transition bg-gray-50/50 gap-3"
                   >
                     <div className="flex items-center gap-4">
                       {/* Initials Avatar */}
-                      <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shadow-inner uppercase">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm shadow-inner uppercase shrink-0">
                         {visitor.name.slice(0, 2)}
                       </div>
                       <div>
@@ -975,7 +974,7 @@ const Dashboard = () => {
                         </p>
                       </div>
                     </div>
-                    <div className="text-right text-xs text-gray-500 font-medium bg-white px-3 py-1.5 rounded-lg border border-gray-100">
+                    <div className="text-left sm:text-right text-xs text-gray-500 font-medium bg-white px-3 py-1.5 rounded-lg border border-gray-100 w-full sm:w-auto">
                       {new Date(visitor.createdAt).toLocaleString("id-ID", {
                         dateStyle: "medium",
                         timeStyle: "short",

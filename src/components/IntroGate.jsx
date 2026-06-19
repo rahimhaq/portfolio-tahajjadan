@@ -49,34 +49,34 @@ const IntroGate = ({ onComplete }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-slate-50/95 backdrop-blur-sm px-4">
+    <div className="fixed inset-0 z-[100] flex items-start sm:items-center justify-center bg-slate-50/95 backdrop-blur-sm px-4 overflow-y-auto py-6">
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
-        className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden"
+        className="w-full max-w-md bg-white rounded-2xl shadow-2xl border border-blue-100 overflow-hidden my-auto"
       >
         {/* Header Chat */}
-        <div className="bg-blue-600 p-4 flex items-center gap-3">
+        <div className="bg-gray-700 p-3.5 sm:p-4 flex items-center gap-3">
           <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-white/30 shadow-inner overflow-hidden">
             <img src="/Tahajjadan.png" alt="Avatar" className="w-full h-full object-contain p-1.5" onError={(e) => { e.target.style.display = 'none'; }} />
           </div>
           <div>
-            <h3 className="font-bold text-white leading-tight">Rahim Haq</h3>
-            <p className="text-xs text-blue-100/80">Interactive Assistant</p>
+            <h3 className="font-bold text-white text-sm sm:text-base leading-tight">Rahim Haq</h3>
+            <p className="text-[10px] sm:text-xs text-blue-100/80">Interactive Assistant</p>
           </div>
         </div>
 
         {/* Area Percakapan */}
-        <div className="p-6">
-          <div className="space-y-4 min-h-[220px] max-h-[350px] overflow-y-auto pr-1">
+        <div className="p-4 sm:p-6">
+          <div className="space-y-3 sm:space-y-4 min-h-[160px] sm:min-h-[220px] max-h-[280px] sm:max-h-[350px] overflow-y-auto pr-1">
 
             {/* Bubble 1: Tanya Nama */}
             <motion.div
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="flex gap-3"
+              className="flex gap-2.5"
             >
-              <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-sm shadow-sm">
+              <div className="px-3.5 py-2.5 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-xs sm:text-sm shadow-sm">
                 Hello! Before entering, may I know your name?
               </div>
             </motion.div>
@@ -86,9 +86,9 @@ const IntroGate = ({ onComplete }) => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex gap-3 justify-end"
+                className="flex gap-2.5 justify-end"
               >
-                <div className="px-4 py-3 rounded-2xl rounded-tr-none bg-blue-600 text-white text-sm shadow-md font-medium">
+                <div className="px-3.5 py-2.5 rounded-2xl rounded-tr-none bg-blue-600 text-white text-xs sm:text-sm shadow-md font-medium">
                   {name}
                 </div>
               </motion.div>
@@ -100,10 +100,10 @@ const IntroGate = ({ onComplete }) => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex gap-3"
+                className="flex gap-2.5"
               >
-                <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-sm shadow-sm">
-                  Pleased to know you, <span className="font-semibold text-blue-600">{name}</span>! Are you visiting as an HR/Recruiter or a regular visitor?
+                <div className="px-3.5 py-2.5 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-xs sm:text-sm shadow-sm">
+                  Pleased to know you, <span className="font-semibold text-gray-600">{name}</span>! Are you visiting as an HR/Recruiter or a regular visitor?
                 </div>
               </motion.div>
             )}
@@ -113,9 +113,9 @@ const IntroGate = ({ onComplete }) => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex gap-3 justify-end"
+                className="flex gap-2.5 justify-end"
               >
-                <div className="px-4 py-3 rounded-2xl rounded-tr-none bg-blue-600 text-white text-sm shadow-md font-medium">
+                <div className="px-3.5 py-2.5 rounded-2xl rounded-tr-none bg-gray-600 text-white text-xs sm:text-sm shadow-md font-medium">
                   {role}
                 </div>
               </motion.div>
@@ -127,9 +127,9 @@ const IntroGate = ({ onComplete }) => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.3 }}
-                className="flex gap-3"
+                className="flex gap-2.5"
               >
-                <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-sm shadow-sm">
+                <div className="px-3.5 py-2.5 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-xs sm:text-sm shadow-sm">
                   {role === "HR / Recruiter" ? (
                     <span>Awesome! Which page would you like to visit first? I can redirect you straight to my <strong>Experience & Resume</strong> page or the <strong>Entire Website</strong>.</span>
                   ) : (
@@ -144,9 +144,9 @@ const IntroGate = ({ onComplete }) => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="flex gap-3 justify-end"
+                className="flex gap-2.5 justify-end"
               >
-                <div className="px-4 py-3 rounded-2xl rounded-tr-none bg-blue-600 text-white text-sm shadow-md font-medium">
+                <div className="px-3.5 py-2.5 rounded-2xl rounded-tr-none bg-blue-600 text-white text-xs sm:text-sm shadow-md font-medium">
                   {target}
                 </div>
               </motion.div>
@@ -158,9 +158,9 @@ const IntroGate = ({ onComplete }) => {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="flex gap-3"
+                className="flex gap-2.5"
               >
-                <div className="px-4 py-3 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-sm shadow-sm">
+                <div className="px-3.5 py-2.5 rounded-2xl rounded-tl-none bg-gray-100 text-gray-700 text-xs sm:text-sm shadow-sm">
                   Great choice! Please come in, redirecting you to your destination...
                 </div>
               </motion.div>
@@ -169,7 +169,7 @@ const IntroGate = ({ onComplete }) => {
           </div>
 
           {/* Area Interaksi Input / Pilihan */}
-          <div className="mt-6 border-t border-gray-100 pt-4">
+          <div className="mt-4 sm:mt-6 border-t border-gray-100 pt-4">
 
             {/* INPUT FORM NAMA (Step 0) */}
             {step === 0 && (
@@ -181,15 +181,15 @@ const IntroGate = ({ onComplete }) => {
               >
                 <div className="relative flex-1 group">
                   <User
-                    size={18}
-                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-blue-500 transition-colors"
+                    size={16}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 group-focus-within:text-gray-500 transition-colors"
                   />
                   <input
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter your name..."
-                    className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all text-base text-gray-800"
+                    className="w-full pl-9 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-gray-500/50 focus:border-gray-500 transition-all text-sm sm:text-base text-gray-800"
                     autoFocus
                     required
                   />
@@ -197,9 +197,9 @@ const IntroGate = ({ onComplete }) => {
                 <button
                   type="submit"
                   disabled={!name.trim()}
-                  className="p-3 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-95"
+                  className="p-2.5 sm:p-3 bg-gray-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed hover:shadow-lg hover:shadow-blue-200 transition-all active:scale-95"
                 >
-                  <Send size={20} />
+                  <Send size={18} />
                 </button>
               </motion.form>
             )}
@@ -209,20 +209,20 @@ const IntroGate = ({ onComplete }) => {
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="flex flex-col sm:flex-row gap-2.5"
+                className="flex flex-col sm:flex-row gap-2"
               >
                 <button
                   onClick={() => handleRoleSelect("HR / Recruiter")}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95"
                 >
-                  <Briefcase size={18} />
+                  <Briefcase size={16} />
                   HR / Recruiter
                 </button>
                 <button
                   onClick={() => handleRoleSelect("Regular Visitor")}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95"
+                  className="flex-1 flex items-center justify-center gap-2 px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95"
                 >
-                  <UserCheck size={18} />
+                  <UserCheck size={16} />
                   Regular Visitor
                 </button>
               </motion.div>
@@ -239,16 +239,16 @@ const IntroGate = ({ onComplete }) => {
                   <>
                     <button
                       onClick={() => handleTargetSelect("Resume & Experience", "/experience")}
-                      className="w-full flex items-center gap-3 px-4 py-3 bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 text-left"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 sm:px-4 sm:py-3 bg-orange-50 border border-orange-200 text-orange-700 hover:bg-orange-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 text-left"
                     >
-                      <Briefcase size={18} className="shrink-0" />
+                      <Briefcase size={16} className="shrink-0" />
                       Go straight to Work Experience & Resume
                     </button>
                     <button
                       onClick={() => handleTargetSelect("Entire website", "/")}
-                      className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 text-left"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 text-left"
                     >
-                      <Eye size={18} className="shrink-0" />
+                      <Eye size={16} className="shrink-0" />
                       Explore Main Homepage (All Pages)
                     </button>
                   </>
@@ -256,23 +256,23 @@ const IntroGate = ({ onComplete }) => {
                   <>
                     <button
                       onClick={() => handleTargetSelect("Projects & Portfolio", "/experience")}
-                      className="w-full flex items-center gap-3 px-4 py-3 bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 text-left"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 sm:px-4 sm:py-3 bg-blue-50 border border-blue-200 text-blue-700 hover:bg-blue-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 text-left"
                     >
-                      <Sparkles size={18} className="shrink-0" />
+                      <Sparkles size={16} className="shrink-0" />
                       View My Projects & Portfolio
                     </button>
                     <button
                       onClick={() => handleTargetSelect("Contact Me", "/contact")}
-                      className="w-full flex items-center gap-3 px-4 py-3 bg-green-50 border border-green-200 text-green-700 hover:bg-green-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 text-left"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 sm:px-4 sm:py-3 bg-green-50 border border-green-200 text-green-700 hover:bg-green-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 text-left"
                     >
-                      <MessageSquare size={18} className="shrink-0" />
+                      <MessageSquare size={16} className="shrink-0" />
                       Get in Touch (Contact Directly)
                     </button>
                     <button
                       onClick={() => handleTargetSelect("Entire website", "/")}
-                      className="w-full flex items-center gap-3 px-4 py-3 bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 rounded-xl font-semibold text-sm transition-all duration-200 active:scale-95 text-left"
+                      className="w-full flex items-center gap-3 px-3 py-2.5 sm:px-4 sm:py-3 bg-gray-50 border border-gray-200 text-gray-700 hover:bg-gray-100 rounded-xl font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 text-left"
                     >
-                      <Eye size={18} className="shrink-0" />
+                      <Eye size={16} className="shrink-0" />
                       Explore All Pages Starting from Homepage
                     </button>
                   </>
@@ -283,7 +283,7 @@ const IntroGate = ({ onComplete }) => {
             {/* LOADING STATE PENDING REDIRECT (Step 3) */}
             {step === 3 && (
               <div className="flex justify-center py-2">
-                <div className="w-6 h-6 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+                <div className="w-5 h-5 border-2 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
               </div>
             )}
 
@@ -291,7 +291,7 @@ const IntroGate = ({ onComplete }) => {
         </div>
 
         {/* Footer decoration */}
-        <div className="h-1 w-full bg-gradient-to-r from-blue-400 via-blue-600 to-blue-400"></div>
+        <div className="h-1 w-full bg-gradient-to-r from-gray-400 via-gray-600 to-gray-400"></div>
       </motion.div>
     </div>
   );
