@@ -57,8 +57,8 @@ const IntroGate = ({ onComplete }) => {
       >
         {/* Header Chat */}
         <div className="bg-blue-600 p-4 flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 shadow-inner">
-            <span className="font-bold text-lg">T</span>
+          <div className="w-10 h-10 rounded-full bg-white flex items-center justify-center border border-white/30 shadow-inner overflow-hidden">
+            <img src="/Tahajjadan.png" alt="Avatar" className="w-full h-full object-contain p-1.5" onError={(e) => { e.target.style.display = 'none'; }} />
           </div>
           <div>
             <h3 className="font-bold text-white leading-tight">Rahim Haq</h3>
