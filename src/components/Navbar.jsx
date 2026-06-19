@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useLocation } from 'react-router-dom';
 import { Menu, X, Download } from 'lucide-react';
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { pathname } = useLocation();
+
+  const handleNavigationClick = (path) => {
+    if (pathname === path) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   const links = [
     { name: 'Home', path: '/' },
@@ -24,7 +31,10 @@ const Navbar = () => {
           {/* LOGO */}
           <Link 
             to="/" 
-            onClick={closeMobileMenu}
+            onClick={() => {
+              closeMobileMenu();
+              handleNavigationClick('/');
+            }}
             className="flex-shrink-0 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity"
           >
             <img src="/Tahajjadan.png" alt="Logo" className="h-8 w-auto md:h-10" onError={(e) => e.target.style.display = 'none'} />
@@ -36,6 +46,7 @@ const Navbar = () => {
               <NavLink
                 key={link.name}
                 to={link.path}
+                onClick={() => handleNavigationClick(link.path)}
                 className={({ isActive }) =>
                   `px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
                     isActive ? 'text-blue-600 bg-blue-50' : 'text-gray-600 hover:text-blue-600 hover:bg-gray-50'
@@ -75,7 +86,10 @@ const Navbar = () => {
             <NavLink
               key={link.name}
               to={link.path}
-              onClick={closeMobileMenu} // Menutup menu setelah link diklik
+              onClick={() => {
+                closeMobileMenu();
+                handleNavigationClick(link.path);
+              }}
               className={({ isActive }) =>
                 `block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
                   isActive ? 'bg-blue-50 text-blue-600' : 'text-gray-600 hover:bg-gray-50 hover:text-blue-600'
